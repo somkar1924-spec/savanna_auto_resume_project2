@@ -1,0 +1,45 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.0.3, pluggy-1.6.0
+rootdir: d:\Users\Admin\Downloads\savanna_auto_suspend-main\savanna_auto_suspend-main
+configfile: pytest.ini
+plugins: html-4.2.0, metadata-3.1.1
+collected 6 items
+
+tests\test_auto_suspend.py ....F.                                        [100%]
+
+================================== FAILURES ===================================
+_____________ test_tc05_long_running_query_should_prevent_suspend _____________
+
+client = <utils.savanna_client.SavannaClient object at 0x0000018065B4BFB0>
+
+    @pytest.mark.suspend
+    def test_tc05_long_running_query_should_prevent_suspend(client):
+        response = client.set_auto_suspend_time(5)
+        validate_api_response(response, "Set Auto Suspend Time")
+    
+        query_response = client.run_query({})
+        print("Query Status:", query_response.status_code)
+        print("Query Body:", query_response.text)
+    
+        assert query_response.status_code in [200, 202, 403, 500, 502, 503], query_response.text
+    
+        status = client.get_status_value()
+    
+        assert status is not None, "Workspace status is missing in API response"
+>       assert status not in SUSPENDED_STATUSES, (
+            f"Workspace suspended/stopping during active query. Current status: {status}"
+        )
+E       AssertionError: Workspace suspended/stopping during active query. Current status: Pausing
+E       assert 'Pausing' not in ['Suspended', 'Stopped', 'Paused', 'Stopping', 'Idle', 'Pausing', ...]
+
+tests\test_auto_suspend.py:125: AssertionError
+---------------------------- Captured stdout call -----------------------------
+Set Auto Suspend Time Status: 200
+Set Auto Suspend Time Body: {"RequestID":"225ca7f0-2be9-4a2c-8292-da4467b73bb2","Error":false,"Message":"Successfully updated the workspace.","ErrorDetails":null,"Result":{"workspace_id":"ccfaeda0-bd6a-43c3-8313-cfdaa29f6bd9","workgroup_id":"b5e78016-67e5-4d6a-85bf-a84b92d0738e","workgroup_name":"","database_id":"7cd9842f-ee61-4415-94c5-44f214a919f3","database_name":"Database-1","folder_statistics":{"total_size":308,"milvus_size":0,"backup_size":0,"log_size":65537690,"workspaces":[{"workspace_id":"ccfaeda0-bd6a-43c3-8313-cfdaa29f6bd9","size":369}],"billed_size":65538059},"org_id":"org_kbkYI9tuLc9OM1K7","org_name":"","region":"ap-south-1","name":"Workspace-1","status":"Pausing","err_message":"","condition_type":"PausePre","tg_version":"4.2.2","created_at":"2026-06-03 06:59:27.151543 +0000 UTC","workspace_type":{"typeName":"TG-00","cpu":"2","memory":"16Gi","partition":1,"ha":3},"replicas":1,"is_rw":true,"nginx_host":"tg-ccfaeda0-bd6a-43c3-8313-cfdaa29f6bd9.tg-3452941248.i.tgcloud.io","version_number":0,"creator":"somkar1924@gmail.com","last_modified_time":"2026-06-09T08:55:23Z","cloud_provider_id":"2d0a8c8c-9d1d-49aa-b6fd-cbe397216ee5","auto_stop_minutes":15,"enable_auto_start":true,"refresh_status":"","refresh_message":"","addons":null,"enable_copilot":false,"enable_ha":false,"solution_catalog_id":"","agent_config":{"enable_topology_force_update":true,"heartbeat_interval_seconds":60,"topology_update_interval_seconds":30,"catalog_activity_update_interval_seconds":1,"query_activity_update_interval_seconds":30},"maintenance_window_time_zone":"Asia/Kolkata","maintenance_window_day_of_week":0,"maintenance_window_hour_of_day":20,"desired_tg_version":"auto","update_strategy":"update_strategy_never","auto_upgrade_state":"none"}}
+Query Status: 403
+Query Body: {"version":{"edition":"enterprise","api":"v2","schema":0},"error":true,"message":"Access Denied because the input token = '' is empty or too short","code":"REST-10016"}
+- Generated html report: file:///d:/Users/Admin/Downloads/savanna_auto_suspend-main/savanna_auto_suspend-main/reports/test_report.html -
+=========================== short test summary info ===========================
+FAILED tests/test_auto_suspend.py::test_tc05_long_running_query_should_prevent_suspend
+=================== 1 failed, 5 passed in 732.86s (0:12:12) ===================
+
