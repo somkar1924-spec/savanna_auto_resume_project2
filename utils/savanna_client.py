@@ -220,10 +220,15 @@ class SavannaClient:
 
     def run_query(self, query_payload):
         query_url = self._get_restpp_query_url()
+
+        print(f"\nQUERY URL = {query_url}")
+        print(f"GRAPH_NAME = {self.graph_name}")
+        print(f"QUERY_NAME = {self.query_name}\n")
+
         if query_payload is not None and not isinstance(query_payload, str):
-            payload = json.dumps(query_payload, separators=(",", ":"), sort_keys=True)
+           payload = json.dumps(query_payload, separators=(",", ":"), sort_keys=True)
         else:
-            payload = query_payload or ""
+           payload = query_payload or ""
 
         if self.restpp_token:
             if self.restpp_token_method == "query":
