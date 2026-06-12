@@ -57,3 +57,22 @@ TC01 – TC20
 - Bug Reports
 - RCA Document
 - HTML Reports
+
+## Out of Scope
+
+- UI Testing
+- Performance Testing
+- Load Testing
+- Security Testing
+- Multi-Region Validation
+
+## Execution Evidence
+
+The following artifacts are generated during execution:
+
+- HTML Test Reports
+- Pytest Execution Logs
+- Screenshots
+- Bug Reports
+- RCA Documentation
+- Traceability Matrix
